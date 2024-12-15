@@ -2,7 +2,7 @@ import os
 from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings, AzureChatOpenAI, AzureOpenAIEmbeddings, AzureOpenAI
 from langchain_community.llms.ollama import Ollama
 from langchain_ollama import ChatOllama
-from langchain_community.embeddings import OllamaEmbeddings, DeepSeekEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain_anthropic import ChatAnthropic
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
