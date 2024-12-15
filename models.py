@@ -94,10 +94,19 @@ def get_sambanova_chat(model_name: str, api_key=get_api_key("sambanova"), temper
 
 # Deepseek models
 def get_deepseek_chat(model_name:str="deepseek-chat", api_key=get_api_key("deepseek"), temperature=DEFAULT_TEMPERATURE, base_url="https://api.deepseek.com/v1"):
-    return DeepSeekChatOpenAI(model_name=model_name, temperature=temperature, deepseek_api_key=api_key)
+    return ChatOpenAI(
+        model_name=model_name, 
+        temperature=temperature, 
+        api_key=api_key, 
+        base_url=base_url
+    )
 
 def get_deepseek_embedding(model_name:str="deepseek-text-embedding", api_key=get_api_key("deepseek"), base_url="https://api.deepseek.com/v1"):
-    return DeepSeekEmbeddings(model_name=model_name, deepseek_api_key=api_key)
+    return OpenAIEmbeddings(
+        model=model_name, 
+        api_key=api_key, 
+        base_url=base_url
+    )
 
 # Zhipu AI models
 def get_zhipu_chat(model_name:str="glm-4", api_key=get_api_key("zhipu"), temperature=DEFAULT_TEMPERATURE):
