@@ -8,7 +8,6 @@ from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_google_genai import GoogleGenerativeAI, HarmBlockThreshold, HarmCategory
 from langchain_mistralai import ChatMistralAI
-from langchain_community.chat_models import DeepSeekChatOpenAI
 from pydantic.v1.types import SecretStr
 from python.helpers.dotenv import load_dotenv
 import base64
