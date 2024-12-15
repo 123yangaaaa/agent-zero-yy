@@ -35,6 +35,12 @@ RUN chmod +x /usr/local/bin/initialize.sh
 # Ensure the virtual environment and pip setup
 RUN $VIRTUAL_ENV/bin/pip install --upgrade pip
 
+# Install AI model dependencies
+RUN $VIRTUAL_ENV/bin/pip install \
+    zhipuai==2.0.1 \
+    openai \
+    requests
+
 # Expose SSH port
 EXPOSE 22
 

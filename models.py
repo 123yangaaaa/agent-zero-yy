@@ -10,6 +10,10 @@ from langchain_google_genai import GoogleGenerativeAI, HarmBlockThreshold, HarmC
 from langchain_mistralai import ChatMistralAI
 from pydantic.v1.types import SecretStr
 from python.helpers.dotenv import load_dotenv
+import base64
+import requests
+import uuid
+from zhipuai import ZhipuAI
 
 # environment variables
 load_dotenv()
@@ -20,7 +24,6 @@ DEFAULT_TEMPERATURE = 0.0
 # Utility function to get API keys from environment variables
 def get_api_key(service):
     return os.getenv(f"API_KEY_{service.upper()}") or os.getenv(f"{service.upper()}_API_KEY")
-
 
 # Ollama models
 def get_ollama_chat(model_name:str, temperature=DEFAULT_TEMPERATURE, base_url=os.getenv("OLLAMA_BASE_URL") or "http://127.0.0.1:11434", num_ctx=8192):
@@ -87,4 +90,79 @@ def get_openrouter_embedding(model_name: str, api_key=get_api_key("openrouter"),
 # Sambanova models
 def get_sambanova_chat(model_name: str, api_key=get_api_key("sambanova"), temperature=DEFAULT_TEMPERATURE, base_url=os.getenv("SAMBANOVA_BASE_URL") or "https://fast-api.snova.ai/v1", max_tokens=1024):
     return ChatOpenAI(api_key=api_key, model=model_name, temperature=temperature, base_url=base_url, max_tokens=max_tokens) # type: ignore
-   
+
+# Deepseek models
+def get_deepseek_chat(model_name:str="deepseek-chat", api_key=get_api_key("deepseek"), temperature=DEFAULT_TEMPERATURE, base_url="https://api.deepseek.com"):
+    return ChatOpenAI(model_name=model_name, temperature=temperature, api_key=api_key, base_url=base_url)
+
+def get_deepseek_embedding(model_name:str="deepseek-text-embedding", api_key=get_api_key("deepseek"), base_url="https://api.deepseek.com"):
+    return OpenAIEmbeddings(model=model_name, api_key=api_key, base_url=base_url)
+
+# Zhipu AI models
+def get_zhipu_chat(model_name:str="glm-4", api_key=get_api_key("zhipu"), temperature=DEFAULT_TEMPERATURE):
+    from zhipuai import ZhipuAI
+    client = ZhipuAI(api_key=api_key)
+    return client.chat.completions.create(
+        model=model_name,
+        temperature=temperature
+    )
+
+def get_zhipu_embedding(model_name:str="embedding-2", api_key=get_api_key("zhipu")):
+    from zhipuai import ZhipuAI
+    client = ZhipuAI(api_key=api_key)
+    return client.embeddings.create(
+        model=model_name
+    )
+
+def get_glm4v_chat(image_path: str, prompt: str, api_key=get_api_key("zhipu")):
+    import base64
+    from zhipuai import ZhipuAI
+    
+    with open(image_path, 'rb') as img_file:
+        img_base = base64.b64encode(img_file.read()).decode('utf-8')
+    
+    client = ZhipuAI(api_key=api_key)
+    return client.chat.completions.create(
+        model="glm-4v-plus",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": img_base
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "text": prompt
+                    }
+                ]
+            }
+        ]
+    )
+
+# Zhipu Web-Search-Pro
+def get_websearch_pro(query: str, api_key=get_api_key("zhipu")):
+    url = "https://open.bigmodel.cn/api/paas/v4/tools"
+    request_id = str(uuid.uuid4())
+    data = {
+        "request_id": request_id,
+        "tool": "web-search-pro",
+        "stream": False,
+        "messages": [
+            {
+                "role": "user",
+                "content": query
+            }
+        ]
+    }
+    
+    response = requests.post(
+        url,
+        json=data,
+        headers={'Authorization': api_key},
+        timeout=300
+    )
+    return response.json()

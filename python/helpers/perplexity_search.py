@@ -1,33 +1,37 @@
-
-from openai import OpenAI
 import models
+import uuid
+import requests
 
-def perplexity_search(query:str, model_name="llama-3.1-sonar-large-128k-online",api_key=None,base_url="https://api.perplexity.ai"):    
-    api_key = api_key or models.get_api_key("perplexity")
-
-    client = OpenAI(api_key=api_key, base_url=base_url)
-        
-    messages = [
-    #It is recommended to use only single-turn conversations and avoid system prompts for the online LLMs (sonar-small-online and sonar-medium-online).
+def perplexity_search(query:str, api_key=None):
+    """
+    使用智谱 Web-Search-Pro 进行搜索，替代原有的 Perplexity 搜索
+    """
+    api_key = api_key or models.get_api_key("zhipu")
     
-    # {
-    #     "role": "system",
-    #     "content": (
-    #         "You are an artificial intelligence assistant and you need to "
-    #         "engage in a helpful, detailed, polite conversation with a user."
-    #     ),
-    # },
-    {
-        "role": "user",
-        "content": (
-            query
-        ),
-    },
-    ]
+    url = "https://open.bigmodel.cn/api/paas/v4/tools"
+    request_id = str(uuid.uuid4())
+    data = {
+        "request_id": request_id,
+        "tool": "web-search-pro",
+        "stream": False,
+        "messages": [
+            {
+                "role": "user",
+                "content": query
+            }
+        ]
+    }
     
-    response = client.chat.completions.create(
-        model=model_name,
-        messages=messages, # type: ignore
-    )
-    result = response.choices[0].message.content #only the text is returned
-    return result
+    try:
+        response = requests.post(
+            url,
+            json=data,
+            headers={'Authorization': api_key},
+            timeout=300
+        )
+        result = response.json()
+        if "choices" in result and len(result["choices"]) > 0:
+            return result["choices"][0]["message"]["content"]
+    except Exception as e:
+        print(f"Web-Search-Pro search failed: {str(e)}")
+    return ""

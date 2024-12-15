@@ -1,0 +1,14 @@
+services:
+  agent-zero:
+    build:
+      context: ./docker/run
+      dockerfile: Dockerfile
+    volumes:
+      - .:/root/agent-zero
+      - ./.env:/root/agent-zero/.env
+    ports:
+      - "50022:22"  # SSH port
+    environment:
+      - VIRTUAL_ENV=/opt/venv
+      - PATH=/opt/venv/bin:$PATH
+    restart: unless-stopped

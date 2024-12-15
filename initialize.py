@@ -15,6 +15,11 @@ def initialize():
     # chat_llm = models.get_mistral_chat(model_name="mistral-small-latest", temperature=0)
     # chat_llm = models.get_groq_chat(model_name="llama-3.2-90b-text-preview", temperature=0)
     # chat_llm = models.get_sambanova_chat(model_name="Meta-Llama-3.1-70B-Instruct-8k", temperature=0)
+    # chat_llm = models.get_deepseek_chat(model_name="deepseek-coder", temperature=0)  # 适用于代码相关任务
+    # chat_llm = models.get_deepseek_chat(model_name="deepseek-chat", temperature=0)   # 适用于通用对话
+    # chat_llm = models.get_deepseek_chat(model_name="deepseek-coder-instruct", temperature=0)  # 适用于代码指令任务
+    # chat_llm = models.get_zhipu_chat(model_name="glm-4", temperature=0)  # 智谱 GLM-4 模型
+    # chat_llm = models.get_glm4v_chat(image_path="path/to/image.jpg", prompt="请描述这个图片")  # GLM-4V PLUS 多模态模型
 
     # utility model used for helper functions (cheaper, faster)
     utility_llm = chat_llm
@@ -24,6 +29,8 @@ def initialize():
     # embedding_llm = models.get_ollama_embedding(model_name="nomic-embed-text")
     # embedding_llm = models.get_huggingface_embedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
     # embedding_llm = models.get_lmstudio_embedding(model_name="nomic-ai/nomic-embed-text-v1.5-GGUF")
+    # embedding_llm = models.get_deepseek_embedding(model_name="deepseek-text-embedding")  # Deepseek embedding 模型
+    # embedding_llm = models.get_zhipu_embedding(model_name="embedding-2")  # 智谱 embedding 模型
 
     # agent configuration
     config = AgentConfig(
@@ -57,7 +64,10 @@ def initialize():
         # code_exec_ssh_port = 50022,
         # code_exec_ssh_user = "root",
         # code_exec_ssh_pass = "toor",
-        # additional = {},
+        additional = {
+            "zhipu_web_search": True,  # 启用智谱 Web-Search-Pro
+            "zhipu_multimodal": True,  # 启用 GLM-4V PLUS 多模态功能
+        },
     )
 
     # return config object
