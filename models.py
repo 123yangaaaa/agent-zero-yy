@@ -95,10 +95,10 @@ def get_sambanova_chat(model_name: str, api_key=get_api_key("sambanova"), temper
 def get_deepseek_chat(model_name:str="deepseek-chat", api_key=get_api_key("deepseek"), temperature=DEFAULT_TEMPERATURE, base_url="https://api.deepseek.com/v1"):
     # Map model names to their API versions
     model_mapping = {
-        "deepseek-chat": "deepseek-chat-v1-32k",
-        "deepseek-coder": "deepseek-coder-v1-32k",
-        "deepseek-chat-v1-32k": "deepseek-chat-v1-32k",
-        "deepseek-coder-v1-32k": "deepseek-coder-v1-32k"
+        "deepseek-chat": "deepseek-chat-v1",
+        "deepseek-coder": "deepseek-coder-v1",
+        "deepseek-chat-v1": "deepseek-chat-v1",
+        "deepseek-coder-v1": "deepseek-coder-v1"
     }
     
     # Get the correct model name from mapping
