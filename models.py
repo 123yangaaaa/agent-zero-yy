@@ -92,13 +92,13 @@ def get_sambanova_chat(model_name: str, api_key=get_api_key("sambanova"), temper
     return ChatOpenAI(api_key=api_key, model=model_name, temperature=temperature, base_url=base_url, max_tokens=max_tokens) # type: ignore
 
 # Deepseek models
-def get_deepseek_chat(model_name:str="deepseek-ai/deepseek-chat-1.0", api_key=get_api_key("deepseek"), temperature=DEFAULT_TEMPERATURE, base_url="https://api.deepseek.com/v1"):
+def get_deepseek_chat(model_name:str="deepseek-chat", api_key=get_api_key("deepseek"), temperature=DEFAULT_TEMPERATURE, base_url="https://api.deepseek.com/v1"):
     # Map model names to their API versions
     model_mapping = {
-        "deepseek-chat": "deepseek-ai/deepseek-chat-1.0",
-        "deepseek-coder": "deepseek-ai/deepseek-coder-1.0",
-        "deepseek-ai/deepseek-chat-1.0": "deepseek-ai/deepseek-chat-1.0",
-        "deepseek-ai/deepseek-coder-1.0": "deepseek-ai/deepseek-coder-1.0"
+        "deepseek-chat": "deepseek-chat-v1-32k",
+        "deepseek-coder": "deepseek-coder-v1-32k",
+        "deepseek-chat-v1-32k": "deepseek-chat-v1-32k",
+        "deepseek-coder-v1-32k": "deepseek-coder-v1-32k"
     }
     
     # Get the correct model name from mapping
@@ -111,11 +111,11 @@ def get_deepseek_chat(model_name:str="deepseek-ai/deepseek-chat-1.0", api_key=ge
         base_url=base_url
     )
 
-def get_deepseek_embedding(model_name:str="deepseek-ai/deepseek-text-embedding-v1", api_key=get_api_key("deepseek"), base_url="https://api.deepseek.com/v1"):
+def get_deepseek_embedding(model_name:str="deepseek-text-embedding", api_key=get_api_key("deepseek"), base_url="https://api.deepseek.com/v1"):
     # Map model names to their API versions
     model_mapping = {
-        "deepseek-text-embedding": "deepseek-ai/deepseek-text-embedding-v1",
-        "deepseek-ai/deepseek-text-embedding-v1": "deepseek-ai/deepseek-text-embedding-v1"
+        "deepseek-text-embedding": "text-embedding-v1",
+        "text-embedding-v1": "text-embedding-v1"
     }
     
     # Get the correct model name from mapping
