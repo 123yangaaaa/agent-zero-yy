@@ -93,24 +93,33 @@ def get_sambanova_chat(model_name: str, api_key=get_api_key("sambanova"), temper
 
 # Deepseek models
 def get_deepseek_chat(model_name:str="deepseek-chat", api_key=get_api_key("deepseek"), temperature=DEFAULT_TEMPERATURE, base_url="https://api.deepseek.com/v1"):
-    if model_name == "deepseek-chat":
-        model_name = "deepseek-chat-1.0"
-    elif model_name == "deepseek-coder":
-        model_name = "deepseek-coder-1.0"
+    # Map model names to their API versions
+    model_mapping = {
+        "deepseek-chat": "deepseek-ai/deepseek-chat-1.0",
+        "deepseek-coder": "deepseek-ai/deepseek-coder-1.0"
+    }
+    
+    # Get the correct model name from mapping
+    api_model_name = model_mapping.get(model_name, model_name)
         
     return ChatOpenAI(
-        model_name=model_name, 
+        model_name=api_model_name, 
         temperature=temperature, 
         api_key=api_key, 
         base_url=base_url
     )
 
 def get_deepseek_embedding(model_name:str="deepseek-text-embedding", api_key=get_api_key("deepseek"), base_url="https://api.deepseek.com/v1"):
-    if model_name == "deepseek-text-embedding":
-        model_name = "deepseek-text-embedding-1.0"
+    # Map model names to their API versions
+    model_mapping = {
+        "deepseek-text-embedding": "deepseek-ai/deepseek-text-embedding-v1"
+    }
+    
+    # Get the correct model name from mapping
+    api_model_name = model_mapping.get(model_name, model_name)
         
     return OpenAIEmbeddings(
-        model=model_name, 
+        model=api_model_name, 
         api_key=api_key, 
         base_url=base_url
     )
