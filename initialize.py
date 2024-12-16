@@ -12,20 +12,20 @@ def initialize():
 
     # Select chat model based on environment variable
     if model_type == "deepseek-chat":
-        chat_llm = models.get_deepseek_chat(model_name="deepseek-chat", temperature=0)
+        chat_llm = models.get_deepseek_chat(model_name="deepseek-ai/deepseek-chat-1.0", temperature=0)
     elif model_type == "deepseek-coder":
-        chat_llm = models.get_deepseek_chat(model_name="deepseek-coder", temperature=0)
+        chat_llm = models.get_deepseek_chat(model_name="deepseek-ai/deepseek-coder-1.0", temperature=0)
     elif model_type == "glm4v" and image_path and image_prompt:
         chat_llm = models.get_glm4v_chat(image_path=image_path, prompt=image_prompt)
     else:
         # 默认fallback到 deepseek-chat
-        chat_llm = models.get_deepseek_chat(model_name="deepseek-chat", temperature=0)
+        chat_llm = models.get_deepseek_chat(model_name="deepseek-ai/deepseek-chat-1.0", temperature=0)
 
     # utility model used for helper functions (cheaper, faster)
-    utility_llm = models.get_deepseek_chat(model_name="deepseek-chat", temperature=0)
+    utility_llm = models.get_deepseek_chat(model_name="deepseek-ai/deepseek-chat-1.0", temperature=0)
 
     # embedding model used for memory
-    embedding_llm = models.get_deepseek_embedding(model_name="deepseek-text-embedding")
+    embedding_llm = models.get_deepseek_embedding(model_name="deepseek-ai/deepseek-text-embedding-v1")
 
     # agent configuration
     config = AgentConfig(
